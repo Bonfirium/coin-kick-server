@@ -1,7 +1,7 @@
 export default class RestError {
 
-	constructor(message, status) {
-		this.message = message;
+	constructor(data, status) {
+		this.data = data;
 		this.status = status;
 	}
 

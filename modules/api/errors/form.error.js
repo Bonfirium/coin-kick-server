@@ -2,9 +2,8 @@ import RestError from './rest.error';
 
 export default class FormError extends RestError {
 
-	constructor(data) {
-		super('form error', 400);
-		this.data = data || null;
+	constructor() {
+		super(null, 400);
 	}
 
 	add(field, error) {

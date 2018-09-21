@@ -1,7 +1,11 @@
 import bodyParser from 'body-parser';
 import express from 'express';
 
+import { STATUS_CODE } from './constants';
 import * as AuthController from './controllers/auth.controller';
+import RestError from './errors/rest.error';
+
+const { OK, INTERNAL_SERVER_ERROR } = STATUS_CODE;
 
 let app;
 let server;
@@ -13,15 +17,22 @@ export async function init() {
 	await new Promise((resolve) => {
 		server = app.listen('16320', () => resolve());
 	});
-	app.get('/api/hello', (req, res) => res.status(200).json({ result: 'hello!', status: 200 }));
+	app.get('/api/hello', (req, res) => res.status(OK).json({ result: 'hello!', status: OK }));
 	[AuthController].forEach(({ init }) => init());
 	console.log('API-module has been started');
 }
 
 export function addRestHandler(method, route, validator, handler) {
 	app[method](route, (req, res) => {
-		const form = validator(req);
-		const result = handler({ form });
-		res.status(200).json({ result, status: 200 });
+		try {
+			const form = validator(req);
+			const result = handler({ form });
+			res.status(OK).json({ result, status: OK });
+		} catch (error) {
+			if (error instanceof RestError) {
+				return res.status(error.status).json({ error: error.data, status: error.status });
+			}
+			return res.status(INTERNAL_SERVER_ERROR).json('server side error');
+		}
 	});
 }
