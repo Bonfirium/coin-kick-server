@@ -1,3 +1,9 @@
-import Modules from './modules';
+import Modules from './modules/index';
 
-Modules.ApiModule.init();
+async function main() {
+	await Modules.ApiModule.init();
+	console.log('server has been started');
+}
+
+// noinspection JSIgnoredPromiseFromCall
+main();
