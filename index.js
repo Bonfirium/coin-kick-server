@@ -1,1 +1,3 @@
-console.log('Hello world');
+import Modules from './modules';
+
+Modules.ApiModule.init();
