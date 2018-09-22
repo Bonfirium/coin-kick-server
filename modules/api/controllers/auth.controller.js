@@ -14,7 +14,7 @@ export function init() {
 async function signUp({ form: { email, password }, req }) {
 	try {
 		const user = await createUser(email, password);
-		await promisify((cb) => req.login(user, cb));
+		await promisify((cb) => req.login(user, cb))();
 		return user;
 	} catch (err) {
 		switch (err.message) {
