@@ -1,7 +1,7 @@
 const separatedByUsers = 'separatedByUsers';
 const independent = 'independent';
 
-function throwUnknwonTypeError() {
+function throwUnknownTypeError() {
 	throw new Error('invalid queue element type');
 }
 
@@ -58,7 +58,7 @@ export function execForUserWithId(userId, func) {
 				}
 				return;
 			default:
-				return throwUnknwonTypeError();
+				return throwUnknownTypeError();
 		}
 	});
 }
@@ -83,7 +83,7 @@ export function execIndependent(func) {
 				globalQueue.last = newQueueElement;
 				return;
 			default:
-				return throwUnknwonTypeError();
+				return throwUnknownTypeError();
 		}
 	});
 }
@@ -142,6 +142,6 @@ function run() {
 		case independent:
 			return processIndependent();
 		default:
-			return throwUnknwonTypeError();
+			return throwUnknownTypeError();
 	}
 }
