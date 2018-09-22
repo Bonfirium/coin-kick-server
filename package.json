@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "babel-node index.js",
+		"start": "NODE_ENV=dev babel-node index.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "",
@@ -17,7 +17,10 @@
 	},
 	"dependencies": {
 		"body-parser": "^1.18.3",
+		"config": "^2.0.1",
 		"express": "^4.16.3",
+		"log4js": "^3.0.5",
+		"mongoose": "^5.2.17",
 		"validator": "^10.7.1"
 	}
 }
