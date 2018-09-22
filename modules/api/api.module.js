@@ -11,6 +11,7 @@ import { inspect } from 'util';
 
 import { COOKIES_LIFETIME, STATUS_CODE } from './api.constants';
 import * as AuthController from './controllers/auth.controller';
+import * as UserController from './controllers/user.controller';
 import RestError from './errors/rest.error';
 import UserModel from '../../models/user.model';
 
@@ -53,7 +54,7 @@ export async function init() {
 		server = app.listen(config.api.port, () => resolve());
 	});
 	app.get('/api/hello', (req, res) => res.status(OK).json({ result: 'hello!', status: OK }));
-	[AuthController].forEach(({ init }) => init());
+	[AuthController, UserController].forEach(({ init }) => init());
 	logger.info('API-module has been started');
 }
 

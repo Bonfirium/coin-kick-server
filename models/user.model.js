@@ -7,6 +7,7 @@ export default mongoose.model('user', new mongoose.Schema({
 		unique: true,
 		index: true,
 	},
+	displayName: { type: String, default: null },
 	password_hash: { type: String, required: true },
 }, { timestamp: true }));
 
