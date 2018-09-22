@@ -9,6 +9,9 @@ mongoose.Promise = global.Promise;
 
 export async function connect() {
 	logger.trace('start connection to mongoDB');
-	await mongoose.connect(`mongodb://127.0.0.1:${config.db.port}/${config.db.name}`, { useNewUrlParser: true });
+	await mongoose.connect(`mongodb://127.0.0.1:${config.db.port}/${config.db.name}`, {
+		useNewUrlParser: true,
+		useCreateIndex: true,
+	});
 	logger.info('mongoDB has been connected');
 }

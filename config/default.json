@@ -1,6 +1,7 @@
 {
 	"api": {
-		"port": 16320
+		"port": 16320,
+		"session_secret": "hgcKCbKPAR9ve4nUH6DypY18vKvdr7kt"
 	},
 	"db": {
 		"name": "",
