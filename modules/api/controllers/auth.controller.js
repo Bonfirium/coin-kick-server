@@ -4,7 +4,7 @@ import { STATUS_CODE } from '../api.constants';
 import { addRestHandler } from '../api.module';
 import FormError from '../errors/form.error';
 import { auth, onlyLogged } from '../forms/auth.form';
-import { createUser, errors } from '../../../repositories/user.repository';
+import { createUser, errors } from '../../../services/user.service';
 
 export function init() {
 	addRestHandler('post', '/api/auth/sign-up', auth, signUp);

@@ -12,21 +12,11 @@ import { inspect } from 'util';
 import { COOKIES_LIFETIME, STATUS_CODE } from './api.constants';
 import * as AuthController from './controllers/auth.controller';
 import RestError from './errors/rest.error';
-import UserModel from '../../models/user.model';
 
 const MongoStore = connectMongo(session);
 const logger = getLogger('api.module');
 passport.serializeUser((user, done) => done(null, user._id.toString()));
-passport.deserializeUser(async (userId, done) => {
-	let user;
-	try {
-		user = await UserModel.findOne({ _id: userId });
-	} catch (error) {
-		done(error);
-		return;
-	}
-	done(null, user);
-});
+passport.deserializeUser((userId, done) => done(null, userId));
 const { OK, INTERNAL_SERVER_ERROR } = STATUS_CODE;
 
 let app;
@@ -73,13 +63,13 @@ export function addRestHandler(method, route, validator, handler) {
 		try {
 			const form = validator(req);
 			const result = await handler({ form, req, user: req.user });
-			logger.trace(`new request ${inspect(form, { compact: true })}`);
+			logger.trace(`${method.toUpperCase()} ${route} ${inspect(form, { compact: true })}`);
 			res.status(OK).json({ result: result || true, status: OK });
 		} catch (error) {
 			if (error instanceof RestError) {
 				return res.status(error.status).json({ error: error.data, status: error.status });
 			}
-			logger.trace(`new request\n${inspect({
+			logger.trace(`${method.toUpperCase()} ${route}\n${inspect({
 				query: req.query,
 				body: req.body,
 				params: req.params,
