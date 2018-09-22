@@ -12,11 +12,21 @@ import { inspect } from 'util';
 import { COOKIES_LIFETIME, STATUS_CODE } from './api.constants';
 import * as AuthController from './controllers/auth.controller';
 import RestError from './errors/rest.error';
+import UserModel from '../../models/user.model';
 
 const MongoStore = connectMongo(session);
 const logger = getLogger('api.module');
 passport.serializeUser((user, done) => done(null, user._id.toString()));
-passport.deserializeUser(async (data, done) => done(null, data));
+passport.deserializeUser(async (userId, done) => {
+	let user;
+	try {
+		user = await UserModel.findOne({ _id: userId });
+	} catch (error) {
+		done(error);
+		return;
+	}
+	done(null, user);
+});
 const { OK, INTERNAL_SERVER_ERROR } = STATUS_CODE;
 
 let app;

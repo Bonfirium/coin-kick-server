@@ -26,9 +26,3 @@ main();
  * @property {String} db.port
  * @property {String} db.name
  */
-
-/**
- * @typedef {Object} MongooseModel
- * @property {function(params:*):Promise.<Mongoose.Document>} findOne
- * @property {function(doc:*):Promise.<Mongoose.Document>} create
- */
