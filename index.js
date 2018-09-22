@@ -9,10 +9,8 @@ logger.level = 'trace';
 async function main() {
 	logger.trace('start server initializing');
 	// noinspection JSCheckFunctionSignatures
-	await Promise.all([
-		connect(),
-		Modules.ApiModule.init(),
-	]);
+	await connect();
+	await Modules.ApiModule.init();
 	logger.info('server has been started');
 }
 

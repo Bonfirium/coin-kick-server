@@ -15,6 +15,8 @@ import RestError from './errors/rest.error';
 
 const MongoStore = connectMongo(session);
 const logger = getLogger('api.module');
+passport.serializeUser((user, done) => done(null, user._id.toString()));
+passport.deserializeUser(async (data, done) => done(null, data));
 const { OK, INTERNAL_SERVER_ERROR } = STATUS_CODE;
 
 let app;
@@ -45,13 +47,24 @@ export async function init() {
 	logger.info('API-module has been started');
 }
 
+/**
+ * @param {'get'|'post'} method
+ * @param {String} route
+ * @param {function(req?)?} validator
+ * @param {function({ form:Object, user:UserDocument?, req }):Promise.<*>} handler
+ */
 export function addRestHandler(method, route, validator, handler) {
+	if (!handler) {
+		// noinspection JSValidateTypes
+		handler = validator;
+		validator = () => ({});
+	}
 	app[method](route, async (req, res) => {
 		try {
 			const form = validator(req);
-			const result = await handler({ form, req });
+			const result = await handler({ form, req, user: req.user });
 			logger.trace(`new request ${inspect(form, { compact: true })}`);
-			res.status(OK).json({ result, status: OK });
+			res.status(OK).json({ result: result || true, status: OK });
 		} catch (error) {
 			if (error instanceof RestError) {
 				return res.status(error.status).json({ error: error.data, status: error.status });

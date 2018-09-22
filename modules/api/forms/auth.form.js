@@ -1,11 +1,18 @@
 import validator from 'validator';
 
 import { FIELD_NOT_PROVIDED } from './_form-errors';
+import { STATUS_CODE } from '../api.constants';
 import FormError from '../errors/form.error';
+import RestError from '../errors/rest.error';
 
 const MIN_PASSWORD_LENGTH = 9;
 const MAX_PASSWORD_LENGTH = 32;
 const PASSWORD_VALIDATOR = /^[a-zA-Z\d,./<>?;':"[\]\\{}|!@#$%^&*()-_=+`~]*$/;
+
+export function onlyLogged(req) {
+	if (!req.user) throw new RestError('unauthorized', STATUS_CODE.UNAUTHORIZED);
+	return {};
+}
 
 export function auth({ body: { email, password } }) {
 	const error = new FormError();
