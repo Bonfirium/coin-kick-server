@@ -6,5 +6,6 @@
 	"db": {
 		"name": "",
 		"port": 27017
-	}
+	},
+	"cors": true
 }
