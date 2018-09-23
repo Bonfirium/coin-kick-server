@@ -3,6 +3,7 @@
 		"port": 16320,
 		"session_secret": "hgcKCbKPAR9ve4nUH6DypY18vKvdr7kt"
 	},
+	"cors": true,
 	"db": {
 		"name": "",
 		"port": 27017

@@ -7,10 +7,12 @@ import session from 'express-session';
 import { getLogger } from 'log4js';
 import mongoose from 'mongoose';
 import passport from 'passport';
+import cors from 'cors';
 import { inspect } from 'util';
 
 import { COOKIES_LIFETIME, STATUS_CODE } from './api.constants';
-import * as AuthController from './controllers/auth.controller';
+import { init as initAuthController } from './controllers/auth.controller';
+import { init as initUserController } from './controllers/user.controller';
 import RestError from './errors/rest.error';
 
 const MongoStore = connectMongo(session);
@@ -28,6 +30,16 @@ export async function init() {
 	app = express();
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(bodyParser.json());
+	if (config.cors) {
+		// noinspection JSUnusedGlobalSymbols
+		app.use(cors({
+			origin: (origin, cb) => cb(null, true),
+			credentials: true,
+			methods: ['GET', 'PUT', 'POST', 'OPTIONS', 'DELETE', 'PATCH'],
+			headers: ['x-user', 'X-Signature', 'accept', 'content-type'],
+		}));
+		app.options('*', cors());
+	}
 	app.use(session({
 		name: 'crypto.sid',
 		secret: config.api.session_secret,
@@ -43,12 +55,13 @@ export async function init() {
 		server = app.listen(config.api.port, () => resolve());
 	});
 	app.get('/api/hello', (req, res) => res.status(OK).json({ result: 'hello!', status: OK }));
-	[AuthController].forEach(({ init }) => init());
+	initAuthController();
+	initUserController();
 	logger.info('API-module has been started');
 }
 
 /**
- * @param {'get'|'post'} method
+ * @param {'get'|'patch'|'post'|'put'} method
  * @param {String} route
  * @param {function(req?)?} validator
  * @param {function({ form:Object, user:UserDocument?, req }):Promise.<*>} handler
