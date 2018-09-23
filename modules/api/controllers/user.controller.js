@@ -1,7 +1,7 @@
 import { addRestHandler } from '../api.module';
 import { setDisplayName as setDisplayNameForm } from '../forms/user.form';
 import { onlyLogged } from '../forms/auth.form';
-import { setDisplayName } from '../../../repositories/user.repository';
+import * as UserRepository from '../../../repositories/user.repository';
 
 export function init() {
 	// noinspection JSCheckFunctionSignatures
@@ -11,4 +11,8 @@ export function init() {
 
 function getCurrentUser({ user }) {
 	return user;
+}
+
+function setDisplayName({ form, user }) {
+	return UserRepository.setDisplayName(user._id, form.displayName);
 }
