@@ -25,6 +25,12 @@ export function getBlock(index) {
 	return web3.eth.getBlock(index);
 }
 
-export function getTransaction(txId) {
-	return web3.eth.getTransaction(txId);
+/**
+ * @param txId
+ * @returns {Promise<{ to:String, value:String, hash:String }>}
+ */
+export async function getTransaction(txId) {
+	const result = await web3.eth.getTransaction(txId);
+	if (result.to) result.to = result.to.toLowerCase();
+	return result;
 }

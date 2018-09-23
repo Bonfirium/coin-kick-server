@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"bcrypt": "^3.0.1",
+		"bignumber.js": "^7.2.1",
 		"body-parser": "^1.18.3",
 		"buffer-xor": "^2.0.2",
 		"config": "^2.0.1",
