@@ -7,6 +7,7 @@ import { auth, onlyLogged } from '../forms/auth.form';
 import { create, errors, findByEmail } from '../../../repositories/user.repository';
 import RestError from '../errors/rest.error';
 import * as bcrypt from 'bcrypt';
+import { expand } from '../../../services/user.service';
 
 export function init() {
 	addRestHandler('post', '/api/auth/sign-up', auth, signUp);
@@ -18,7 +19,7 @@ async function signUp({ form: { email, password }, req }) {
 	try {
 		const user = await create(email, password);
 		await promisify((cb) => req.login(user, cb))();
-		return user;
+		return expand(user);
 	} catch (err) {
 		switch (err.message) {
 			case errors.ALREADY_EXISTS:
@@ -33,6 +34,7 @@ async function signUp({ form: { email, password }, req }) {
 
 function signOut({ req }) {
 	req.logout();
+	return true;
 }
 
 async function signIn({ form: { email, password }, req }) {
@@ -40,5 +42,5 @@ async function signIn({ form: { email, password }, req }) {
 	const User = await findByEmail(email);
 	if (!User || !await bcrypt.compare(password, User.passwordHash)) throw error;
 	await promisify((cb) => req.login(User, cb))();
-	return User;
+	return expand(User);
 }

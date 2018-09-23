@@ -12,7 +12,7 @@ export default mongoose.model('user', new mongoose.Schema({
 }, { timestamp: true }));
 
 /**
- * @typedef {Object} UserDocument
+ * @typedef {MongooseDocument} UserDocument
  * @property {String} email
  * @property {String} passwordHash
  */

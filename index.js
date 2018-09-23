@@ -27,3 +27,8 @@ main();
  * @property {String} db.port
  * @property {String} db.name
  */
+
+/**
+ * @typedef {Object} MongooseDocument
+ * @property {String} _id
+ */

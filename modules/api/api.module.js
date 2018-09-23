@@ -74,7 +74,7 @@ export async function init() {
  * @param {'get'|'patch'|'post'|'put'} method
  * @param {String} route
  * @param {function(req?)?} validator
- * @param {function({ form:Object, user:UserDocument?, req }):Promise.<*>} handler
+ * @param {function({ form:Object, user:UserDocument?, req:Request? }):(Promise.<*>|*)} handler
  */
 export function addRestHandler(method, route, validator, handler) {
 	if (!handler) {
