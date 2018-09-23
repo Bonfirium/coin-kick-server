@@ -15,4 +15,6 @@ export default mongoose.model('wallet', new mongoose.Schema({
 		index: true,
 	},
 	encryptedPK: { type: String, required: true, unique: true },
+	realBalance: { type: String, required: true, default: '0' },
+	balance: { type: String, required: true, default: '0' },
 }, { timestamp: true }));

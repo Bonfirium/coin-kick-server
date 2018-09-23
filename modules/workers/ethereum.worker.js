@@ -21,7 +21,7 @@ export async function init() {
 
 async function iterate() {
 	const blocksNumber = await getBlockNumber();
-	for (let blockIndex = lastProcessedBlockIndex; blockIndex < blocksNumber; blockIndex += 1) {
+	for (let blockIndex = lastProcessedBlockIndex; blockIndex < blocksNumber - 3; blockIndex += 1) {
 		logger.trace(`start processing block #${blockIndex}`);
 		const block = await getBlock(blockIndex);
 		const transactions = await Promise.all(block.transactions.map((txId) => getTransaction(txId)))
@@ -43,13 +43,23 @@ async function iterate() {
 		const processedTxs = await Promise.all(Object.keys(txsByReceiver)
 			.map((receiver) => WalletByAddress[receiver])
 			.filter((a) => a)
-			.map((Wallet) => Promise.all(txsByReceiver[Wallet.address].map((tx) => TxModel.create({
-				wallet: Wallet._id,
-				txId: tx.hash,
-				value: new BN(tx.value).times(`1e-${Ethereum.maxPrecision}`),
-			})))));
+			.map(async (Wallet) => {
+				const txs = txsByReceiver[Wallet.address];
+				const Txs = await Promise.all(txs.map((tx) => TxModel.create({
+					wallet: Wallet._id,
+					txId: tx.hash,
+					value: new BN(tx.value).times(`1e-${Ethereum.maxPrecision}`),
+				})));
+				['realBalance', 'balance'].forEach((field) => {
+					Wallet.set(field, Txs.reduce((acc, { value }) =>
+						acc.plus(value), new BN(Wallet.get(field))).toString());
+				});
+				await Wallet.save();
+				return Txs;
+			}));
 		logger.info(`block #${blockIndex} has been processed`);
-		Ethereum.lastProcessedBlockIndex += 1;
+		lastProcessedBlockIndex = blockIndex;
+		Ethereum.lastProcessedBlockIndex = blockIndex;
 		await Ethereum.save();
 		if (processedTxs.length > 0) logger.info(`processed txs:\n${processedTxs}`);
 	}
