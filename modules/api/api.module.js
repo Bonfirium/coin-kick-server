@@ -10,8 +10,8 @@ import passport from 'passport';
 import { inspect } from 'util';
 
 import { COOKIES_LIFETIME, STATUS_CODE } from './api.constants';
-import * as AuthController from './controllers/auth.controller';
-import * as UserController from './controllers/user.controller';
+import { init as initAuthController } from './controllers/auth.controller';
+import { init as initUserController } from './controllers/user.controller';
 import RestError from './errors/rest.error';
 import UserModel from '../../models/user.model';
 
@@ -54,12 +54,13 @@ export async function init() {
 		server = app.listen(config.api.port, () => resolve());
 	});
 	app.get('/api/hello', (req, res) => res.status(OK).json({ result: 'hello!', status: OK }));
-	[AuthController, UserController].forEach(({ init }) => init());
+	initAuthController();
+	initUserController();
 	logger.info('API-module has been started');
 }
 
 /**
- * @param {'get'|'post'} method
+ * @param {'get'|'patch'|'post'|'put'} method
  * @param {String} route
  * @param {function(req?)?} validator
  * @param {function({ form:Object, user:UserDocument?, req }):Promise.<*>} handler

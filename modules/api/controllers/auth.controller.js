@@ -4,7 +4,7 @@ import { STATUS_CODE } from '../api.constants';
 import { addRestHandler } from '../api.module';
 import FormError from '../errors/form.error';
 import { auth, onlyLogged } from '../forms/auth.form';
-import { createUser, errors } from '../../../repositories/user.repository';
+import { create, errors } from '../../../repositories/user.repository';
 
 export function init() {
 	addRestHandler('post', '/api/auth/sign-up', auth, signUp);
@@ -13,7 +13,7 @@ export function init() {
 
 async function signUp({ form: { email, password }, req }) {
 	try {
-		const user = await createUser(email, password);
+		const user = await create(email, password);
 		await promisify((cb) => req.login(user, cb))();
 		return user;
 	} catch (err) {
