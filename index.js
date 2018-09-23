@@ -10,8 +10,16 @@ async function main() {
 	logger.trace('start server initializing');
 	// noinspection JSCheckFunctionSignatures
 	await connect();
-	await Modules.ApiModule.init();
-	// await Modules.EthereumWorker.init();
+	switch (process.env.MODULE) {
+		case 'API':
+			await Modules.ApiModule.init();
+			break;
+		case 'WORKERS':
+			await Modules.EthereumWorker.init();
+			break;
+		default:
+			throw new Error('invalid MODULE');
+	}
 	logger.info('server has been started');
 }
 

@@ -49,6 +49,8 @@ async function iterate() {
 				value: new BN(tx.value).times(`1e-${Ethereum.maxPrecision}`),
 			})))));
 		logger.info(`block #${blockIndex} has been processed`);
+		Ethereum.lastProcessedBlockIndex += 1;
+		await Ethereum.save();
 		if (processedTxs.length > 0) logger.info(`processed txs:\n${processedTxs}`);
 	}
 	setTimeout(() => iterate(), 3000);
