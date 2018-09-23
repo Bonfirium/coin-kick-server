@@ -1,5 +1,6 @@
 export const FIELD_NOT_PROVIDED = 'is not provided';
-export const IS_NOT_STRING_OR_NULL = 'is not string or null';
+export const NOT_A_STRING_OR_THE_NULL = 'is not a string or the null';
+export const NOT_A_STRING = 'is not a string';
 
 export function GET_UNDER_MIN_LENGTH_ERROR(minLength) {
 	return {

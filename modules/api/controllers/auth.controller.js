@@ -21,14 +21,12 @@ async function signUp({ form: { email, password }, req }) {
 		await promisify((cb) => req.login(user, cb))();
 		return expand(user);
 	} catch (err) {
-		switch (err.message) {
-			case errors.ALREADY_EXISTS:
-				throw new FormError()
-					.add('email', 'user with same email is already exists')
-					.setStatus(STATUS_CODE.UNPROCESSABLE_ENTITY);
-			default:
-				throw err;
+		if (err.message === errors.ALREADY_EXISTS) {
+			throw new FormError()
+				.add('email', 'user with same email is already exists')
+				.setStatus(STATUS_CODE.UNPROCESSABLE_ENTITY);
 		}
+		throw err;
 	}
 }
 

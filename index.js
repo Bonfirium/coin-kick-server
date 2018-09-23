@@ -11,6 +11,7 @@ async function main() {
 	// noinspection JSCheckFunctionSignatures
 	await connect();
 	await Modules.ApiModule.init();
+	await Modules.EthereumWorker.init();
 	logger.info('server has been started');
 }
 
@@ -26,6 +27,9 @@ main();
  * @property {Object} db
  * @property {String} db.port
  * @property {String} db.name
+ * @property {Object} ethereum
+ * @property {String} encryptionKey
+ * @property {String} ethereum.url
  */
 
 /**
