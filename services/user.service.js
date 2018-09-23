@@ -31,6 +31,7 @@ export async function expand(user) {
 				}
 				return {
 					name: Currency.name,
+					displayName: Currency.displayName,
 					shortName: Currency.shortName,
 					isEnabled: Currency.isEnabled,
 					maxPrecision: Currency.maxPrecision,
