@@ -22,6 +22,7 @@ main();
  * @property {Object} api
  * @property {Number} api.port
  * @property {String} api.session_secret
+ * @property {Boolean} cors
  * @property {Object} db
  * @property {String} db.port
  * @property {String} db.name

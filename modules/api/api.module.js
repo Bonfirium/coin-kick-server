@@ -41,10 +41,9 @@ export async function init() {
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(bodyParser.json());
 	if (config.cors) {
+		// noinspection JSUnusedGlobalSymbols
 		app.use(cors({
-			origin: (origin, callback) => {
-				callback(null, true);
-			},
+			origin: (origin, cb) => cb(null, true),
 			credentials: true,
 			methods: ['GET', 'PUT', 'POST', 'OPTIONS', 'DELETE', 'PATCH'],
 			headers: ['x-user', 'X-Signature', 'accept', 'content-type'],
