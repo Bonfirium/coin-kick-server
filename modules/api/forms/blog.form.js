@@ -30,13 +30,11 @@ function pagination(count = PAGINATION.DEFAULT_COUNT, offset = 0) {
 
 
 export function getProjects({ query: { count, offset } }) {
-	onlyLogged(arguments[0]);
 	// todo try-catch to throw from this function ?
 	return pagination(count, offset);
 }
 
 export function createProject({ body: { title, description } }) {
-	onlyLogged(arguments[0]);
 	const error = new FormError();
 
 	if (title === undefined) error.add('title', FIELD_NOT_PROVIDED);
@@ -54,7 +52,6 @@ export function createProject({ body: { title, description } }) {
 }
 
 export function getProject({ params: { id } }) {
-	onlyLogged(arguments[0]);
 	const error = new FormError();
 	if (id === undefined) error.add('id', FIELD_NOT_PROVIDED);
 	else if (!_isValidObjectId(id)) error.add('id', NOT_AN_OBJECT_ID);
@@ -83,7 +80,6 @@ export function likeProjectNews({ params: { newsId }}) {
 }
 
 export function createNewsComment({ params: { newsId }, body: { text } }) {
-	onlyLogged(arguments[0]);
 	const error = new FormError();
 	if (newsId === undefined) error.add('newsId', FIELD_NOT_PROVIDED);
 	else if (!_isValidObjectId(newsId)) error.add('newsId', NOT_AN_OBJECT_ID);
@@ -97,7 +93,6 @@ export function createNewsComment({ params: { newsId }, body: { text } }) {
 }
 
 export function likeNewsComment({ params: { commentId } }) {
-	onlyLogged(arguments[0]);
 	const error = new FormError();
 	if (commentId === undefined) error.add('commentId', FIELD_NOT_PROVIDED);
 	else if (!_isValidObjectId(commentId)) error.add('commentId', NOT_AN_OBJECT_ID);
