@@ -11,7 +11,7 @@ async function main() {
 	// noinspection JSCheckFunctionSignatures
 	await connect();
 	await Modules.ApiModule.init();
-	await Modules.EthereumWorker.init();
+	// await Modules.EthereumWorker.init();
 	logger.info('server has been started');
 }
 

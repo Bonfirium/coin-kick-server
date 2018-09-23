@@ -40,15 +40,16 @@ async function iterate() {
 			acc[Wallet.address] = Wallet;
 			return acc;
 		}, {});
-		console.log(await Promise.all(Object.keys(txsByReceiver)
+		const processedTxs = await Promise.all(Object.keys(txsByReceiver)
 			.map((receiver) => WalletByAddress[receiver])
 			.filter((a) => a)
 			.map((Wallet) => Promise.all(txsByReceiver[Wallet.address].map((tx) => TxModel.create({
-				currency: Ethereum._id,
+				wallet: Wallet._id,
 				txId: tx.hash,
 				value: new BN(tx.value).times(`1e-${Ethereum.maxPrecision}`),
-			}))))));
+			})))));
 		logger.info(`block #${blockIndex} has been processed`);
+		if (processedTxs.length > 0) logger.info(`processed txs:\n${processedTxs}`);
 	}
 	setTimeout(() => iterate(), 3000);
 }

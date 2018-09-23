@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export const schema = mongoose.Schema({
-	currency: { ref: 'currency', type: mongoose.Schema.ObjectId, required: true },
+	wallet: { ref: 'wallet', type: mongoose.Schema.ObjectId, required: true },
 	txId: { type: String, require: true },
 	value: { type: String, required: true },
 }, { timestamp: true });
