@@ -7,6 +7,7 @@ import session from 'express-session';
 import { getLogger } from 'log4js';
 import mongoose from 'mongoose';
 import passport from 'passport';
+import cors from 'cors';
 import { inspect } from 'util';
 
 import { COOKIES_LIFETIME, STATUS_CODE } from './api.constants';
@@ -28,6 +29,17 @@ export async function init() {
 	app = express();
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(bodyParser.json());
+	if (config.cors) {
+		app.use(cors({
+			origin: (origin, callback) => {
+				callback(null, true);
+			},
+			credentials: true,
+			methods: ['GET', 'PUT', 'POST', 'OPTIONS', 'DELETE', 'PATCH'],
+			headers: ['x-user', 'X-Signature', 'accept', 'content-type'],
+		}));
+		app.options('*', cors());
+	}
 	app.use(session({
 		name: 'crypto.sid',
 		secret: config.api.session_secret,
