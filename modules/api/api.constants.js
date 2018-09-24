@@ -9,4 +9,9 @@ export const STATUS_CODE = {
 	UNPROCESSABLE_ENTITY: 422,
 };
 
+export const PAGINATION = {
+	MAX_COUNT: 50,
+	DEFAULT_COUNT: 30,
+};
+
 export const COOKIES_LIFETIME = TIME.WEEK;

@@ -12,6 +12,7 @@ import { inspect } from 'util';
 
 import { COOKIES_LIFETIME, STATUS_CODE } from './api.constants';
 import { init as initAuthController } from './controllers/auth.controller';
+import { init as initBlogController } from './controllers/blog.controller';
 import { init as initUserController } from './controllers/user.controller';
 import RestError from './errors/rest.error';
 import UserModel from '../../models/user.model';
@@ -66,6 +67,7 @@ export async function init() {
 	});
 	app.get('/api/hello', (req, res) => res.status(OK).json({ result: 'hello!', status: OK }));
 	initAuthController();
+	initBlogController();
 	initUserController();
 	logger.info('API-module has been started');
 }
